@@ -20,7 +20,8 @@ module SeedFu
     @@default_options = {
       :chunk_size  => 100,
       :constraints => [:id],
-      :seed_type   => :seed
+      :seed_type   => :seed,
+      :header      => true
     }
 
     # @param [Hash] options
@@ -88,11 +89,11 @@ module SeedFu
 
       def write_to_io(io)
         @io, @count = io, 0
-        @io.write(file_header)
+        @io.write(file_header) if @options[:header]
         @io.write(seed_header)
         yield(self)
         @io.write(seed_footer)
-        @io.write(file_footer)
+        @io.write(file_footer) if @options[:header]
       ensure
         @io, @count = nil, nil
       end
